@@ -1,8 +1,6 @@
 # MechAi-SAR-Colorization-using-Dl
 
 
-# ColorSAR: SAR Image Colorization
-
 ## SAR Image Colorization using Deep Learning
 
 ### Project Overview
