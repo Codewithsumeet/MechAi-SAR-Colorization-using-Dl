@@ -1,6 +1,5 @@
 # MechAi-SAR-Colorization-using-Dl
 
-Here is a README file based on the information in the provided sources and our conversation history, suitable for a GitHub repository on SAR Image Colorization using Deep Learning.
 
 ```markdown
 SAR Image Colorization using Deep Learning
