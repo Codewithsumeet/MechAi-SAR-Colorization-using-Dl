@@ -1,117 +1,133 @@
 # MechAi-SAR-Colorization-using-Dl
 
 
-```markdown
-SAR Image Colorization using Deep Learning
+# ColorSAR: SAR Image Colorization
 
-This project focuses on the task of automatically colorizing Synthetic Aperture Radar (SAR) images using deep learning techniques. SAR is an active remote sensing system that captures images with unique properties, often resulting in grayscale outputs that differ significantly from optical imagery, which is passive and relies on reflected light. A key challenge in SAR imagery is speckle noise, which arises from the interference of returning radar signals.
+## SAR Image Colorization using Deep Learning
 
-Converting SAR images to color can enhance their interpretability and facilitate fusion with optical data. This project explores and implements various deep learning models and techniques for this purpose, aiming to create a custom solution by leveraging feature extraction, transfer learning, and feature fusion. The process involves training models to learn the complex mapping from SAR image characteristics to realistic color representations, often using paired SAR and optical images as training data.
+### Project Overview
+This project aims to develop a deep learning model for colorizing grayscale Synthetic Aperture Radar (SAR) images. SAR images are typically represented in grayscale and lack the natural color information present in standard optical images. Our project enhances the interpretability of these images by converting them into colorized versions, which are useful for applications such as geological studies, environmental monitoring, and surface feature analysis.
 
-Features
-
-*   Deep Learning Models: Implementation and experimentation with several deep learning architectures suitable for image-to-image translation tasks, including U-Net, Pix2Pix, CycleGAN, cGAN4ColSAR, Conditional Variational Autoencoder (CVAE), and a Multi-scale fusion network.
-*   Feature Engineering: Incorporation of feature extraction, transfer learning, and feature fusion techniques to potentially improve colorization quality, particularly for a custom Generative Adversarial Network (GAN) model.
-*   Data Preprocessing Pipeline: Tools for loading, normalizing, augmenting, and applying post-processing techniques like histogram matching to SAR and optical image pairs.
-*   Training Scripts: Modular scripts for training individual models and potentially a fused multi-model approach.
-*   Evaluation Framework: Scripts to evaluate the performance of colorization models using standard image quality metrics.
-*   Configuration Management: Use of YAML configuration files for managing model hyperparameters and training settings.
-*   Structured Repository: Organized file structure for data, models, preprocessing, training, evaluation, results, and configurations.
-
-Getting Started
-
-Prerequisites
-
-To run this project, you will need:
-
-*   Python: A working Python environment.
-*   Deep Learning Libraries: TensorFlow and/or PyTorch are required for model implementation and training. Keras may also be used for prototyping.
-*   Image Processing Libraries: OpenCV and Scikit-image for various image manipulation tasks.
-*   Data Manipulation Libraries: NumPy and Pandas are used for handling image data arrays and potentially dataset information (like CSV mappings).
-*   (Optional) MATLAB can be useful for initial testing and model design.
-
-Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone <repository_url>
-    cd SAR_Image_Colorization_Project
-    ```
-2.  Install dependencies: Ensure you have `pip` installed and run:
-    ```bash
-    pip install -r requirements.txt
-    ```
-    This will install all required Python libraries listed in the `requirements.txt` file.
-
-Data
-
-*   The project requires a dataset consisting of **paired SAR and optical images**. These pairs are crucial for training the deep learning models to learn the relationship between SAR data and color information from optical images.
-*   Relevant datasets include **Sentinel-1 and Sentinel-2 imagery** (e.g., the SEN12MS dataset) and potentially **SpaceNet 6** data.
-*   Organize your dataset within the `data/` directory as specified in the project structure:
-    *   `data/sar/`: Contains grayscale SAR images.
-    *   `data/optical/`: Contains the corresponding optical images (ground truth).
-    *   `train.csv`, `val.csv`, `test.csv`: CSV files mapping SAR images to their corresponding optical images for training, validation, and testing.
-
-Project Structure
-
-The project follows a modular directory structure:
+#### **What are SAR Images?**
+Synthetic Aperture Radar (SAR) images are produced by radar systems that utilize microwave signals to create detailed images of the Earth's surface. Unlike traditional optical imaging, SAR operates independently of sunlight and can penetrate through clouds, providing valuable data for various remote sensing applications. However, SAR images are generally monochromatic and do not convey color information, which can limit their usability in certain analyses. Colorization can help reveal features that are not easily distinguishable in grayscale images, improving interpretability and analysis.
 
 
+### **Model Architecture**
+![alt Architectue](./images/image.png)
 
-Usage
 
-The main entry point for the project pipeline is `main.py`. This script orchestrates the data preprocessing, model training, and evaluation phases based on the specified configurations in the `configs/` directory.
+### **Project Workflow**
 
-To run the full pipeline using a specific model configuration:
+<img src="https://github.com/user-attachments/assets/6e280a7a-e9fd-4fc4-b810-4fddf56a57cd" alt="Flow" style="background-color:gray">
 
-```bash
-python main.py --config configs/model_config.yaml
-```
+### Repository Files
+- `Our_Research` folder contains the methods and our work/implementation on different parts during the project implementation.
+- `ML_PROJECT_P2.ipynb` is the submission of phase 2 of our project.
+- `ColorSAR_Project_Report.pdf` is the report file of our project phase 2 submission.
+- `original_model.ipynb` contains the implementation of **Training-1** as shown in the above workflow.
+- `gray_model.ipynb` is the implementation of **Training-2** as shown in the above workflow.
+- Other files contain the changes we try in the original model architecture as mentioned in the paper.
 
-*(Note: The exact command and available arguments for `main.py` depend on its implementation, but the structure implies configuration-driven execution.)*
 
-You can modify the YAML files in `configs/` to adjust hyperparameters, model choices, dataset paths, and other settings.
+#### **Step 1: Load and Slice Images into Patches**
+- The SAR images are loaded from the dataset and divided into smaller patches. This allows the model to focus on localized details, improving the accuracy of colorization.
 
-Evaluation Metrics
+#### **Step 2: Convert Patches to Lab Color Space**
+- The grayscale image patches are converted to Lab color space. This enables the model to work with the **a** and **b** channels, which represent the chromaticity information needed for colorization.
 
-The performance of the colorization models is evaluated using common image quality metrics:
+#### **Step 3: Combine and Load Data**
+- The processed image patches are merged and loaded into batches. This optimizes memory usage and ensures efficient training of the model.
 
-*   **Peak Signal-to-Noise Ratio (PSNR)**
-*   **Structural Similarity Index Measure (SSIM)**
-*   **Fréchet Inception Distance (FID)**
-*   Other relevant image quality metrics
+#### **Step 4: Implement the Encoder and Decoder**
+- The encoder extracts important spatial and texture features from the SAR images, while the decoder maps these features to the **a** and **b** channels, resulting in colorized images.
 
-Dependencies
+#### **Step 5: Training**
+- The model is trained using the prepared dataset. Various hyperparameters are adjusted to optimize the learning process and improve the accuracy of colorization.
 
-Key libraries used in this project include:
+#### **Step 6: Prediction**
+- After training, the model generates colorized images by predicting the chromatic information for each patch.
 
-*   TensorFlow
-*   PyTorch
-*   Keras
-*   OpenCV
-*   Scikit-image
-*   NumPy
-*   Pandas
-*   PyYAML (for config files)
+#### **Step 7: Evaluation**
+- The model's predictions are evaluated using several metrics. These include both quantitative measures and visual inspection to ensure that the colorized images are accurate and aesthetically pleasing.
 
-A full list of dependencies is provided in `requirements.txt`.
+### **Model Comparison**
 
-References
+In this section, we compare the results of two different trained models. Each model has been evaluated based on its performance in colorizing the SAR images. Below are the images produced by each model, showcasing the differences in colorization quality and accuracy.
 
-This project is built upon research and techniques in several areas, including:
+#### **Model 1 (Training-1): Trained on L and AB Channels of Original Color SAR Images**
 
-*   Deep learning for SAR image processing and analysis.
-*   Image colorization techniques using deep learning.
-*   Specific neural network architectures such as U-Net and Generative Adversarial Networks (GANs), including variations like CycleGAN and Pix2Pix, which have been applied to image-to-image translation and SAR image processing.
-*   Datasets relevant to SAR and optical imagery, such as Sentinel-1/Sentinel-2 and SpaceNet 6.
+![Model 1 Result](https://github.com/user-attachments/assets/df049178-7010-4e2a-ba98-065e963bdaa7)
+![Model 1 Result2](https://github.com/user-attachments/assets/6fabe51c-476c-4f10-b8f7-4c93e31534c1)
 
-The code and methodology draw insights from various research papers and technical materials covering these topics.
 
-License
+*This model was trained using both the **L** (luminance) and **AB** (chrominance) channels of original color SAR images as input-output pairs. As a result, the colorization output is highly accurate, demonstrating that this model effectively captures the underlying color information. The successful performance in this model proves the efficacy of the colorization approach.*
 
-*(Add license information here. Example: This project is licensed under the MIT License - see the LICENSE file for details. Some components or ideas may be inspired by research published under open licenses like Creative Commons Attribution.)*
+#### **Model 2 (Training-2): Trained on L Channel of Noisy, Uncolored SAR Images (Post-Denoising) with AB Channel of Original Color SAR Images**
 
-Acknowledgements
+![Model 2 Result](https://github.com/user-attachments/assets/e5716ae3-d267-40d2-ab6c-a369d55c7f9f)
+![Model 2 Result2](https://github.com/user-attachments/assets/377bdffa-ca74-44a2-b93b-7802f9c1b6e2)
 
-We acknowledge the researchers and authors whose work has informed and guided this project, including contributions in the fields of deep learning, SAR image processing, image colorization, and remote sensing data analysis. Special thanks to the presenters and authors of the source materials used, which provided foundational knowledge and technical insights.
-```
+
+*In this model, training was conducted on the **L** channel of noisy, uncolored SAR images after applying denoising, combined with the **AB** channel of original color SAR images as input-output pairs. Consequently, while the color prediction remains fairly good, the overall results do not match the original due to the noise present in the **L** channel. This noise has impacted the preservation of structural definition in the images, leading to less accurate representations compared to Model 1.*
+
+Note: More results can be seen in the images folder.
+
+## **Evaluation**
+We have evaluated on the following metrics:
+
+### Peak Signal-to-Noise Ratio (PSNR)
+**Definition**: PSNR measures the similarity between the denoised image and the ground truth, in terms of pixel intensity values. It is expressed in decibels (dB).
+
+**Interpretation**:
+- A higher PSNR value indicates better reconstruction quality (less error between the denoised and clean images).
+
+**Typical ranges for PSNR**:
+- \>30 dB: Excellent quality (almost indistinguishable from the ground truth).
+- 25–30 dB: Good quality, some perceptible noise.
+- <25 dB: Noticeable degradation in quality.
+
+### Structural Similarity Index (SSIM)
+**Definition**: SSIM measures the perceptual similarity between the denoised image and the ground truth, accounting for luminance, contrast, and structure.
+
+**Range**: SSIM values range from 0 to 1, where:
+- 1.0: Perfect match to the ground truth.
+- 0.0: No similarity to the ground truth.
+
+**Interpretation**:
+- High SSIM (close to 1) means that the structural and visual content of the denoised image is very similar to the clean image.
+
+**Values**:
+- \>0.95: Excellent structural similarity.
+- 0.85–0.95: Good similarity but some structural loss.
+- <0.85: Noticeable structural degradation.
+
+### **Model 1 Results:**: 
+- **PSNR**: 29.9230
+- **SSIM**: 0.9400
+
+### **Model 2 Results:**
+- **PSNR**: 14.4466
+- **SSIM**: 0.2314
+
+
+## **Comparison Summary**
+- **Model 1** demonstrates superior color accuracy due to the use of original L channel, effectively proving the robustness of the colorization model.
+- **Model 2**, while showing decent color predictions, suffers from structural fidelity issues caused by noise in the luminance channel, indicating that further refinement in denoising processes may be necessary for future iterations.
+
+
+## **Future Work**
+- **Improving Denoising**: Enhance the denoising techniques to reduce noise in the SAR images, ensuring cleaner inputs and more accurate colorization.
+- **Extended Evaluation**: Perform a comprehensive evaluation using additional metrics and visual inspection to ensure high-quality results.
+- **Final Predictions**: Generate the final set of colorized SAR images using the improved model.
+ 
+### **Technologies Used**
+- Python
+- PyTorch
+- NumPy
+- OpenCV
+- Matplotlib 
+- Pillow
+- Scipy I
+
+
+
