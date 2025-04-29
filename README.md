@@ -10,8 +10,6 @@ This project aims to develop a deep learning model for colorizing grayscale Synt
 Synthetic Aperture Radar (SAR) images are produced by radar systems that utilize microwave signals to create detailed images of the Earth's surface. Unlike traditional optical imaging, SAR operates independently of sunlight and can penetrate through clouds, providing valuable data for various remote sensing applications. However, SAR images are generally monochromatic and do not convey color information, which can limit their usability in certain analyses. Colorization can help reveal features that are not easily distinguishable in grayscale images, improving interpretability and analysis.
 
 
-### **Model Architecture**
-![alt Architectue](./images/image.png)
 
 
 ### **Project Workflow**
